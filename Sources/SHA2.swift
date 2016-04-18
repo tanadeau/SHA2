@@ -10,7 +10,6 @@
 // - Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // - This notice may not be removed or altered from any source or binary distribution.
 
-@_exported import C7
 @_exported import CryptoEssentials
 
 public protocol SHA2Variant {
@@ -18,15 +17,15 @@ public protocol SHA2Variant {
     static var h: [UInt64] { get }
     static var k: [UInt64] { get }
     
-    static func resultingArray<T>(hh:[T]) -> ArraySlice<T>
-    static func calculate(message: [Byte]) -> [Byte]
+    static func resultingArray<T>(_ hh:[T]) -> ArraySlice<T>
+    static func calculate(_ message: [UInt8]) -> [UInt8]
 }
 
 public protocol SHA2Variant32: SHA2Variant { }
 public protocol SHA2Variant64: SHA2Variant { }
 
 extension SHA2Variant32 {
-    public static func calculate(message: [Byte]) -> [Byte] {
+    public static func calculate(_ message: [UInt8]) -> [UInt8] {
         var tmpMessage = message
         
         let len = 64
@@ -126,7 +125,7 @@ extension SHA2Variant32 {
 }
 
 extension SHA2Variant64 {
-    public static func calculate(message: [Byte]) -> [Byte] {
+    public static func calculate(_ message: [UInt8]) -> [UInt8] {
         var tmpMessage = message
         
         let len = 128
@@ -244,7 +243,7 @@ final public class SHA256 : SHA2Variant32 {
                                      0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
                                      0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2]
     
-    public static func resultingArray<T>(hh: [T]) -> ArraySlice<T> {
+    public static func resultingArray<T>(_ hh: [T]) -> ArraySlice<T> {
         return ArraySlice(hh)
     }
 }
@@ -269,7 +268,7 @@ final public class SHA384 : SHA2Variant64 {
                                      0x113f9804bef90dae, 0x1b710b35131c471b, 0x28db77f523047d84, 0x32caab7b40c72493, 0x3c9ebe0a15c9bebc,
                                      0x431d67c49c100d4c, 0x4cc5d4becb3e42b6, 0x597f299cfc657e2a, 0x5fcb6fab3ad6faec, 0x6c44198c4a475817]
     
-    public static func resultingArray<T>(hh: [T]) -> ArraySlice<T> {
+    public static func resultingArray<T>(_ hh: [T]) -> ArraySlice<T> {
         return hh[0..<6]
     }
 }
@@ -294,7 +293,7 @@ final public class SHA512 : SHA2Variant64 {
                                      0x113f9804bef90dae, 0x1b710b35131c471b, 0x28db77f523047d84, 0x32caab7b40c72493, 0x3c9ebe0a15c9bebc,
                                      0x431d67c49c100d4c, 0x4cc5d4becb3e42b6, 0x597f299cfc657e2a, 0x5fcb6fab3ad6faec, 0x6c44198c4a475817]
     
-    public static func resultingArray<T>(hh: [T]) -> ArraySlice<T> {
+    public static func resultingArray<T>(_ hh: [T]) -> ArraySlice<T> {
         return ArraySlice(hh)
     }
 }
@@ -304,7 +303,7 @@ final public class SHA2<Variant: SHA2Variant> : HashProtocol {
         return Variant.size
     }
     
-    public static func calculate(message: [Byte]) -> [Byte] {
+    public static func calculate(_ message: [UInt8]) -> [UInt8] {
         return Variant.calculate(message)
    }
 }
