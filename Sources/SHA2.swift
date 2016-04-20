@@ -307,3 +307,31 @@ final public class SHA2<Variant: SHA2Variant> : HashProtocol {
         return Variant.calculate(message)
    }
 }
+
+public extension String {
+    public func sha256() -> [UInt8] {
+        return SHA2<SHA256>.calculate([UInt8](self.utf8))
+    }
+    
+    public func sha384() -> [UInt8] {
+        return SHA2<SHA384>.calculate([UInt8](self.utf8))
+    }
+    
+    public func sha512() -> [UInt8] {
+        return SHA2<SHA512>.calculate([UInt8](self.utf8))
+    }
+}
+
+public extension CSArrayType where Iterator.Element == UInt8 {
+    public func sha256() -> [UInt8] {
+        return SHA2<SHA256>.calculate(self.cs_arrayValue())
+    }
+    
+    public func sha384() -> [UInt8] {
+        return SHA2<SHA384>.calculate(self.cs_arrayValue())
+    }
+    
+    public func sha512() -> [UInt8] {
+        return SHA2<SHA512>.calculate(self.cs_arrayValue())
+    }
+}
