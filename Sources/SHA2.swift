@@ -42,7 +42,11 @@ extension SHA2Variant32 {
             msgLength += 1
         }
         
-        tmpMessage += Array<UInt8>(repeating: 0, count: counter)
+        #if !swift(>=3.0)
+            tmpMessage += Array<UInt8>(count: counter, repeatedValue: 0)
+        #else
+            tmpMessage += Array<UInt8>(repeating: 0, count: counter)
+        #endif
         
         // hash values
         var hh = [UInt32]()
@@ -58,7 +62,11 @@ extension SHA2Variant32 {
         for chunk in BytesSequence(chunkSize: chunkSizeBytes, data: tmpMessage) {
             // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15, big-endian
             // Extend the sixteen 32-bit words into sixty-four 32-bit words:
-            var M:[UInt32] = [UInt32](repeating: 0, count: Self.k.count)
+            #if !swift(>=3.0)
+                var M:[UInt32] = [UInt32](count: Self.k.count, repeatedValue: 0)
+            #else
+                var M:[UInt32] = [UInt32](repeating: 0, count: Self.k.count)
+            #endif
             for x in 0..<M.count {
                 switch (x) {
                 case 0...15:
@@ -142,7 +150,11 @@ extension SHA2Variant64 {
             msgLength += 1
         }
         
-        tmpMessage += Array<UInt8>(repeating: 0, count: counter)
+        #if !swift(>=3.0)
+            tmpMessage += Array<UInt8>(count: counter, repeatedValue:  0)
+        #else
+            tmpMessage += Array<UInt8>(count: counter, repeatedValue: 0)
+        #endif
         
         // hash values
         var hh = [UInt64]()
@@ -159,7 +171,12 @@ extension SHA2Variant64 {
         for chunk in BytesSequence(chunkSize: chunkSizeBytes, data: tmpMessage) {
             // break chunk into sixteen 64-bit words M[j], 0 ≤ j ≤ 15, big-endian
             // Extend the sixteen 64-bit words into eighty 64-bit words:
-            var M = [UInt64](repeating: 0, count: Self.k.count)
+            #if !swift(>=3.0)
+                var M = [UInt64](count: Self.k.count, repeatedValue: 0)
+            #else
+                var M = [UInt64](repeating: 0, count: Self.k.count)
+            #endif
+            
             for x in 0..<M.count {
                 switch (x) {
                 case 0...15:
@@ -322,7 +339,8 @@ public extension String {
     }
 }
 
-public extension CSArrayType where Iterator.Element == UInt8 {
+#if !swift(>=3.0)
+public extension CSArrayType where Generator.Element == UInt8 {
     public func sha256() -> [UInt8] {
         return SHA2<SHA256>.calculate(self.cs_arrayValue())
     }
@@ -335,3 +353,18 @@ public extension CSArrayType where Iterator.Element == UInt8 {
         return SHA2<SHA512>.calculate(self.cs_arrayValue())
     }
 }
+#else
+    public extension CSArrayType where Iterator.Element == UInt8 {
+        public func sha256() -> [UInt8] {
+            return SHA2<SHA256>.calculate(self.cs_arrayValue())
+        }
+    
+        public func sha384() -> [UInt8] {
+            return SHA2<SHA384>.calculate(self.cs_arrayValue())
+        }
+    
+        public func sha512() -> [UInt8] {
+            return SHA2<SHA512>.calculate(self.cs_arrayValue())
+        }
+    }
+#endif
