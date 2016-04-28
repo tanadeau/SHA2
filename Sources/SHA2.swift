@@ -151,9 +151,9 @@ extension SHA2Variant64 {
         }
         
         #if !swift(>=3.0)
-            tmpMessage += Array<UInt8>(count: counter, repeatedValue:  0)
-        #else
             tmpMessage += Array<UInt8>(count: counter, repeatedValue: 0)
+        #else
+            tmpMessage += Array<UInt8>(repeating: 0, count: counter)
         #endif
         
         // hash values
