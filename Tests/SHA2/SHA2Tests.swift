@@ -12,21 +12,11 @@ import SHA2
 import CryptoEssentials
 
 class SHA2Tests: XCTestCase {
-    static var allTests: [(String, SHA2Tests -> () throws -> Void)] {
-        return [
-                   ("testSHA256", testSHA256),
-                   ("testSHA384", testSHA384),
-                   ("testSHA512", testSHA512),
-        ]
-    }
-    
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
+    static let allTests = [
+       ("testSHA256", testSHA256),
+       ("testSHA384", testSHA384),
+       ("testSHA512", testSHA512),
+    ]
     
     func testSHA256() {
         let hash = "Swift is AWESOME".sha256()
