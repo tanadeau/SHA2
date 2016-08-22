@@ -62,8 +62,8 @@ extension SHA2Variant32 {
             for x in 0..<M.count {
                 switch (x) {
                 case 0...15:
-                    let start = chunk.startIndex + (x * sizeofValue(M[x]))
-                    let end = start + sizeofValue(M[x])
+                    let start = chunk.startIndex + (x * MemoryLayout<UInt32>.size)
+                    let end = start + MemoryLayout<UInt32>.size
                     let le = toUInt32Array(chunk[start..<end])[0]
                     M[x] = le.bigEndian
                     break
@@ -163,8 +163,8 @@ extension SHA2Variant64 {
             for x in 0..<M.count {
                 switch (x) {
                 case 0...15:
-                    let start = chunk.startIndex + (x * sizeofValue(M[x]))
-                    let end = start + sizeofValue(M[x])
+                    let start = chunk.startIndex + (x * MemoryLayout<UInt64>.size)
+                    let end = start + MemoryLayout<UInt64>.size
                     let le = toUInt64Array(chunk[start..<end])[0]
                     M[x] = le.bigEndian
                     break
